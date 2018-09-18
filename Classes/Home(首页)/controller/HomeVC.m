@@ -424,7 +424,7 @@ static NSString *const GSYouLikeHeadViewID = @"GSYouLikeHeadView";
         GSFeatured * featModel = [[GSFeatured alloc] initWithDictionary:dict error:nil];
         [_goodsHomeSilderArray addObject:featModel];
         [_goodsHomeSilderImagesArray addObject:featModel.Image];
-        
+        [EntireManageMent onjson:dict fileName:@"Edit"];
     }
 }
 -(void)cacheDataTBKCouponModel:(NSArray *)dataArr{
@@ -434,12 +434,16 @@ static NSString *const GSYouLikeHeadViewID = @"GSYouLikeHeadView";
         if (iModel.CouponClickUrl != nil) {
             [self.dataArr addObject:iModel];
         }
+        [EntireManageMent onjson:dict fileName:@"TBKCoupon"];
+
     }
 }
 -(void)cacheDataGSGridItem:(NSArray *)dataArr{
     for (NSDictionary * dict in dataArr) {
         GSGridItem * gridModel = [[GSGridItem alloc] initWithDictionary:dict error:nil];
 //        GSLog(@"indexType \n%@",gridModel.Category);
+        [EntireManageMent onjson:dict fileName:@"GSGridItem"];
+
         switch ([gridModel.Category integerValue]) {
             case 1:
             {
@@ -605,6 +609,8 @@ static NSString *const GSYouLikeHeadViewID = @"GSYouLikeHeadView";
         if (indexPath.section == 0) {
             GSSlideshowHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:GSSlideshowHeadViewID forIndexPath:indexPath];
             headerView.imageGroupArray = _goodsHomeSilderImagesArray;
+//            headerView.imageGroupArray = GoodsHomeSilderImagesArray;
+
             headerView.delegate = self;
             reusableview = headerView;
             
@@ -834,6 +840,9 @@ static NSString *const GSYouLikeHeadViewID = @"GSYouLikeHeadView";
 
 }
 -(void)myGSGoodsGridClicked:(NSInteger)index{
+    if (_gridItem != 0) {
+        
+   
     GSGridItem * itme = _gridItem[index];
     GSLog(@"%@",itme.Title);
 //    NSString * favoritesId;
@@ -867,6 +876,7 @@ static NSString *const GSYouLikeHeadViewID = @"GSYouLikeHeadView";
 //            break;
 //    }
     [self pushGoodsSet:itme.Title favoritesId:itme.FavoritesId isCouponOrUatm:NO];
+         }
 }
 -(void)myGSFeaturedClicked:(NSInteger)index{
 //    NSArray * arr =__FeaturedArr__;
@@ -917,9 +927,10 @@ static NSString *const GSYouLikeHeadViewID = @"GSYouLikeHeadView";
 //        default:
 //            break;
 //    }
-    GSGridItem * itmeModel = _featured[index];
-    [self pushGoodsSet:@"男装"favoritesId:itmeModel.FavoritesId isCouponOrUatm:NO];
-
+    if (_featured != 0) {
+        GSGridItem * itmeModel = _featured[index];
+        [self pushGoodsSet:@"男装"favoritesId:itmeModel.FavoritesId isCouponOrUatm:NO];
+    }
 }
 -(void)myGSSlideshowHeadViewClicked:(NSInteger)index{
     NSString * favoritesId;
@@ -952,10 +963,11 @@ static NSString *const GSYouLikeHeadViewID = @"GSYouLikeHeadView";
         default:
             break;
     }
-    GSFeatured * featModel  = _goodsHomeSilderArray[index];
-    GSLog(@"滚动广告 ：%@",featModel.Title);
-    [self pushGoodsSet:featModel.Title favoritesId:favoritesId isCouponOrUatm:YES];
-    
+    if (_goodsHomeSilderArray != 0) {
+        GSFeatured * featModel  = _goodsHomeSilderArray[index];
+        GSLog(@"滚动广告 ：%@",featModel.Title);
+        [self pushGoodsSet:featModel.Title favoritesId:favoritesId isCouponOrUatm:YES];
+    }
 }
 
 -(void)pushDetailVC{

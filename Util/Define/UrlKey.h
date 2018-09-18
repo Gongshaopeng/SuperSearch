@@ -95,6 +95,12 @@
 
 #define __API_wireless_share_tpwd_query__  @"taobao.wireless.share.tpwd.query"//!<查询解析淘口令
 
+#define __API_EditConfig__                   @"" //!<热门词或者滚动广告 传参 cate: 1 Banner 2 热词
+#define __API_UatmFavorites__                @"" //!<首页数据 传递参数为cate 1:顶部导航，2:精选专题，3:底部推荐
+#define __API_Item_guess_like__              @""//!<淘宝客商品猜你喜欢
+#define __API_Wireless_Share_Tpwd_Query__    @""//!<解析淘口令
+#define __API_Wireless_Share_Tpwd_Create__   @""//!<生成淘口令
+
 
 //鹏瑶API
 #elif URLAPIBUG == 2

@@ -38,5 +38,7 @@
 +(void)updataConfigKey:(NSString *)configKey configvalue:(NSString *)configvalue updataTime:(NSString *)time;
 +(NSString *)readConfigDataWithConfigKey:(NSString *)configKey;
 
+//生成json文件
++ (void)onjson:(NSDictionary *)dict fileName:(NSString *)fileName;
 
 @end
