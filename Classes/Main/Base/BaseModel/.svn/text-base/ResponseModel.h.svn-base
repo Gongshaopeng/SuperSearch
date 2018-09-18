@@ -1,0 +1,27 @@
+//
+//  ResponseModel.h
+//  如意夺宝
+//
+//  Created by jianjie on 16/4/6.
+//  Copyright © 2016年 com.juwang.rydb. All rights reserved.
+//
+
+#import "BaseBean.h"
+
+@interface ResponseModel : BaseBean
+
+@property (nonatomic,copy) NSString *message;
+@property (nonatomic,assign) NSInteger stat;
+@property (nonatomic,copy)  NSString *error;
+@property (nonatomic,copy) NSString *pageSize; //!< 一页的数据
+@property (nonatomic,copy) NSString *page;     //!< 当前页数
+@property (nonatomic,copy) NSString *totalPage;//!< 总页数
+@property (nonatomic,copy) NSString *responseError;
+@property (nonatomic,copy) NSString *isLogin;
+@property (nonatomic,copy) NSString *token;
+
+@property (nonatomic,copy) NSArray * s;//搜索热门词
+
+@property (nonatomic,strong) NSDictionary *data;
+
+@end

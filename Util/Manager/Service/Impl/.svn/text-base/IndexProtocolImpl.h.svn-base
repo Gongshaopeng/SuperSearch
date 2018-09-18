@@ -1,0 +1,17 @@
+//
+//  IndexProtocolImpl.h
+//  LaiZhuan
+//
+//  Created by allen on 16/1/12.
+//  Copyright © 2016年 jianjie. All rights reserved.
+//
+
+#import "AbstractAction.h"
+#import "IndexProtocol.h"
+#import "RequestModel.h"
+#import "ResponseModel.h"
+
+@interface IndexProtocolImpl : AbstractAction <IndexProtocol>
+
+
+@end

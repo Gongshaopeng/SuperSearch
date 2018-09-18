@@ -1,0 +1,29 @@
+//
+//  IndexProtocol.h
+//  LaiZhuan
+//
+//  Created by allen on 16/1/12.
+//  Copyright © 2016年 jianjie. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+@class RequestModel;
+@class ResponseModel;
+
+//@class TaskInfodBean;
+
+@protocol IndexProtocol <NSObject>
+
+@optional
+//**
+// *  @author gongxiaopeng, 16-01-13 15:01:26
+// *
+// *  @brief 热门词搜索
+// *
+// *  @param paramDto 请求参数
+// *  @param complete 返回数据
+// *  @param failed   失败的回调
+// */
+- (void)fetchSearchPopularWords:(RequestModel *)paramDto complete:(void (^)(ResponseModel *))complete failed:(void (^)(NSString *error))failed;
+
+@end

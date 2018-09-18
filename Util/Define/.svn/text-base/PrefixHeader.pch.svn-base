@@ -1,0 +1,54 @@
+//
+//  PrefixHeader.pch
+//  Esou
+//
+//  Created by 巩小鹏 on 16/8/26.
+//  Copyright © 2016年 巩小鹏. All rights reserved.
+//
+
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+#import <Availability.h>
+
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+
+#define MAS_SHORTHAND
+
+
+//将全局的写在这里
+#import "Defaults.h"
+#import "Night.h"
+#import "Config.h"
+#import "UrlKey.h"
+#import "Helper.h"
+#import "Product Define.h"
+#import "UIColor+Hex.h"
+#import "NewMarketTool.h"
+#import "Masonry.h"
+#import "SSKeychain.h"
+//#import "ShowHUDTool.h"
+#import "MJRefresh.h"
+//#import "ASTwinkle.h"
+#import "NewTimeTool.h"
+#import "MBProgressHUD.h"
+#import "ZZThemeManager.h"
+#import "NSObject+ZZTheme.h"
+#import "GXToast.h"
+#import "WLNetworking.h"
+#import "STCModel.h"
+#import "CheckNetwork.h"
+#import "KSAlertView.h"
+
+#endif
+
+#endif

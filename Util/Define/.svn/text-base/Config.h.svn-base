@@ -1,0 +1,41 @@
+//
+//  Config.h
+//  Product Temp
+//
+//  Created by jianjie on 15/11/2.
+//  Copyright © 2015年 jianjie. All rights reserved.
+//
+
+//为主要的ui宏定义
+#ifndef Config_h
+#define Config_h
+
+#define IOS7_OR_LATER   ([[[UIDevice currentDevice] systemVersion] compare:@"7.0"] != NSOrderedAscending)
+#define IOS8_OR_LATER   ([[[UIDevice currentDevice] systemVersion] compare:@"8.0"] != NSOrderedAscending)
+#define __kScreenWidth__ [[UIScreen mainScreen] bounds].size.width
+#define __kScreenHeight__ [[UIScreen mainScreen] bounds].size.height
+
+#define __kNavigationBarHeight__ __KSize(64*2)
+#define __kContentHeight__ (__kScreenHeight__-__kNavigationBarHeight__-__kTabBarHeight__)
+#define __kOriginalHeight__ (__kScreenHeight__-__kNavigationBarHeight__)
+#define __kTabBarFrame__ CGRectMake(0, __kScreenHeight__-__kTabBarHeight__, __kScreenWidth__, __kTabBarHeight__)
+#define __kTabBarHeight__ __KSize(88)
+
+// print size
+#define NSLogRect(rect) NSLog(@"%s x:%.4f, y:%.4f, w:%.4f, h:%.4f", #rect, rect.origin.x, rect.origin.y, rect.size.width, rect.size.height)
+#define NSLogSize(size) NSLog(@"%s w:%.4f, h:%.4f", #size, size.width, size.height)
+#define NSLogPoint(point) NSLog(@"%s x:%.4f, y:%.4f", #point, point.x, point.y)
+
+// get color
+#define UIColorFromRGB(R,G,B)		[UIColor colorWithRed:R/255.0f green:G/255.0f blue:B/255.0f alpha:1.0f]
+#define UIAlplaColorFromRGB(R,G,B,A)		[UIColor colorWithRed:R/255.0f green:G/255.0f blue:B/255.0f alpha:A]
+
+// get font
+#define UIFontOfSize(__PARA)    [UIFont systemFontOfSize:__PARA]
+#define UIBoldFontOfSize(__PARA)    [UIFont boldSystemFontOfSize:__PARA]
+
+
+#define __DEFLoginTimeKey__ @"LoginTimeKey"//!<登陆时间
+//#define __DEFLoginTimeKey__ @"LoginTimeKey"//!<登陆时间
+
+#endif /* Config_h */

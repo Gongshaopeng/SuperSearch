@@ -1,0 +1,23 @@
+//
+//  BaseWeb.h
+//  Esou
+//
+//  Created by 巩小鹏 on 16/9/13.
+//  Copyright © 2016年 巩小鹏. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface BaseWeb : UIWebView
+
+
+/**
+ *  加载网络主页
+ */
+-(void)newLoadRequest;
+/**
+ *  加载本地主页
+ */
+-(void)newLoadHTML;
+
+@end

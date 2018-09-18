@@ -1,0 +1,400 @@
+//
+//  BaseViewController.m
+//  TESTDome
+//
+//  Created by 巩继鹏 on 16/6/7.
+//  Copyright © 2016年 Roger. All rights reserved.
+//
+
+#import "BaseViewController.h"
+
+@interface BaseViewController ()
+
+@end
+
+@implementation BaseViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+//    NSArray* windows = [UIApplication sharedApplication].windows;
+//    UIWindow *window = [windows objectAtIndex:0];
+    
+  
+    
+    
+    [self.view addSubview:self.myView];
+    [self.view addSubview:self.baseNavigationBar];
+    [_baseNavigationBar addSubview:self.xian];
+
+    //消除导航栏的影响,显示的视图不被导航栏覆盖
+    self.view.userInteractionEnabled = YES;
+    self.automaticallyAdjustsScrollViewInsets = NO,
+
+    [self layoutSubviews];
+}
+
+- (void)layoutSubviews {
+    //You should set subviews constrainsts or frame here
+    _myView.frame = CGRectMake(0, __kNavigationBarHeight__, __kScreenWidth__,__kOriginalHeight__);
+    _baseNavigationBar.frame = CGRectMake(0, 0, __kScreenWidth__, __kNavigationBarHeight__);
+}
+- (UIView *)myView
+{
+    if (_myView == nil) {
+        _myView = [[UIView alloc]init];
+        _myView.backgroundColor = [UIColor whiteColor];
+    }
+    return _myView;
+}
+
+
+- (BaseNavigationBar *)baseNavigationBar{
+    if (!_baseNavigationBar) {
+        _baseNavigationBar = [[BaseNavigationBar alloc] initWithFrame:CGRectMake(0, 0, __kScreenWidth__, __kNavigationBarHeight__)];
+        _baseNavigationBar.backgroundColor = [UIColor whiteColor];
+           }
+    return _baseNavigationBar;
+}
+-(UIView *)xian{
+    if (!_xian) {
+        _xian = [[UIView alloc]initWithFrame:CGRectMake(0, _baseNavigationBar.frame.size.height+1, __kScreenWidth__, 1)];
+        _xian.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.1];
+
+    }
+    return _xian;
+}
+
+- (void)createRightBarButtonWithImageName:(NSString *)imageName WithSelector:(SEL)selector
+{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [btn setTitle:imageName forState:UIControlStateNormal];
+//    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    btn.frame = CGRectMake(__kScreenWidth__-20, 0, __KSize(36), __KSize(36));
+    [btn addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *rightBar = [[UIBarButtonItem alloc]initWithCustomView:btn];
+    self.baseNavigationBar.rightBarButtons = @[btn];
+    
+
+}
+
+- (void)createLeftBarButtonWithImageName:(NSString *)imageName WithSelector:(SEL)selector
+{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    //    [btn setTitle:imageName forState:UIControlStateNormal];
+    //    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    btn.frame = CGRectMake(__kScreenWidth__-20, 0, __KSize(36), __KSize(36));
+    [btn addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+    //    UIBarButtonItem *rightBar = [[UIBarButtonItem alloc]initWithCustomView:btn];
+    self.baseNavigationBar.leftBarButtons = @[btn];
+    
+    
+}
+
+- (void)createRightBarButtonWithRightBarButton:(NSString *)btnName WithSelector:(SEL)selector
+{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn setTitle:btnName forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//    [btn setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    btn.frame = CGRectMake(__kScreenWidth__-20, 0, 40, 40);
+    [btn addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *rightBar = [[UIBarButtonItem alloc]initWithCustomView:btn];
+    self.baseNavigationBar.rightBarButtons = @[btn];
+    
+    
+}
+
+- (void)createRightBarButtonWithLeftBarButton:(NSString *)btnName WithSelector:(SEL)selector
+{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn setTitle:btnName forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    //    [btn setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    btn.frame = CGRectMake(__kScreenWidth__-20, 0, 40, 40);
+    [btn addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+    //    UIBarButtonItem *rightBar = [[UIBarButtonItem alloc]initWithCustomView:btn];
+    self.baseNavigationBar.leftBarButtons = @[btn];
+    
+    
+}
+
+- (void)createLeftBarButton:(NSString *)btnName img:(NSString *)leftImg WithSelector:(SEL)selector
+{
+    UIButton * btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(__KSize(20), (__kNavigationBarHeight__+22-__KSize(45))/2, __KSize(120), __KSize(45));
+    btn.titleLabel.font=[UIFont systemFontOfSize:__KSize(38)];
+    [btn setTitle:btnName forState:UIControlStateNormal];
+    btn.titleEdgeInsets = UIEdgeInsetsMake(0,__KSize(36), 0, 0);
+//    [btn setTitleColor:[UIColor colorWithHexString:@"#a5a5a5"] forState:UIControlStateNormal];
+    btn.jsonTheme.titleColorWithState(@"ident2", UIControlStateNormal);
+
+    UIImage *image = [UIImage imageNamed:leftImg];
+    UIImageView *iconView = [[UIImageView alloc]initWithImage:image];
+    iconView.frame = CGRectMake(0, 0, __KSize(20*2), __KSize(20*2));
+    [btn addSubview:iconView];
+    
+    [btn addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+//    self.baseNavigationBar.leftBarButtons = @[btn];
+    [self.baseNavigationBar addSubview:btn];
+    
+}
+
+- (void)createRightBarButton:(NSString *)btnName WithSelector:(SEL)selector
+{
+    UIButton *tton = (UIButton *)[self.baseNavigationBar viewWithTag:911];
+    [tton removeFromSuperview];
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(__kScreenWidth__-__KSize(130), (__kNavigationBarHeight__+22-__KSize(45))/2, __KSize(120), __KSize(45));
+
+    [btn setTitle:btnName forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+    //    UIBarButtonItem *rightBar = [[UIBarButtonItem alloc]initWithCustomView:btn];
+//    self.baseNavigationBar.rightBarButtons = @[btn];
+    btn.jsonTheme.titleColorWithState(@"ident2", UIControlStateNormal);
+    btn.tag = 911;
+    [self.baseNavigationBar addSubview:btn];
+
+    
+}
+
+
+- (NSString *)getTimeNow
+{
+    NSString* date;
+    
+    NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
+    //    [formatter setDateFormat:@"YYYY.MM.dd.hh.mm.ss"];
+    [formatter setDateFormat:@"YYYY-MM-dd"];
+    //    [formatter setDateFormat:@" hh:mm:ss -- SSS"];
+    date = [formatter stringFromDate:[NSDate date]];
+    NSString * timeNow = [[NSString alloc] initWithFormat:@"%@", date];
+    //    NSLog(@"%@", timeNow);
+    return timeNow;
+}
+- (NSString *)getDetailedTimeNow
+{
+    NSString* date;
+    
+    NSDateFormatter * formatterDetailedTime = [[NSDateFormatter alloc ] init];
+        [formatterDetailedTime setDateFormat:@"YYYY.MM.dd.hh.mm.ss"];
+//    [formatter setDateFormat:@"YYYY-MM-dd"];
+//        [formatter setDateFormat:@" hh:mm:ss -- SSS"];
+    date = [formatterDetailedTime stringFromDate:[NSDate date]];
+    NSString * detailedTime = [[NSString alloc] initWithFormat:@"%@", date];
+    //    NSLog(@"%@", timeNow);
+    return detailedTime;
+}
+// 弹出警告框
+- (void)showTitle:(NSString *)title
+          message:(NSString *)message
+      titleButton:(NSString *)titleBth
+{
+    UIAlertView *alertView   = [[UIAlertView alloc]
+                                initWithTitle:title
+                                message:message
+                                delegate:nil
+                                cancelButtonTitle:nil
+                                otherButtonTitles:titleBth, nil];
+    alertView.alertViewStyle = UIAlertViewStyleDefault;
+    [alertView show];
+}
+
+#pragma mark - 动画
+- (void)downloadAnimation
+{
+    
+    NSArray* windows = [UIApplication sharedApplication].windows;
+    UIWindow *window = [windows objectAtIndex:0];
+    
+    NSMutableArray *imageArray = [NSMutableArray array];
+    
+    for (int i=0; i<3; i++)
+    {
+        NSString *imageName = [NSString stringWithFormat:@"loading%d.png",i+1];
+        UIImage *image = [UIImage imageNamed:imageName];
+        [imageArray addObject:image];
+    }
+    
+    UIView *downloadImageViewTwo = (UIView *)[window viewWithTag:8888];
+    if (downloadImageViewTwo)
+    {
+        [downloadImageViewTwo removeFromSuperview];
+        downloadImageViewTwo = nil;
+    }
+    
+    UIImageView *downloadImageView = [[UIImageView alloc]initWithFrame:CGRectMake((__kScreenWidth__-100)/2, (__kScreenHeight__-100)/2, 100, 100)];
+    downloadImageView.animationImages =imageArray;
+    
+    //设置动画播放时间
+    downloadImageView.animationDuration = 1.5;
+    //开始播放动画
+    [downloadImageView startAnimating];
+    
+    UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, __kScreenWidth__, __kScreenHeight__)];
+    [bgView addSubview:downloadImageView];
+    bgView.tag = 8888;
+    [window addSubview:bgView];
+    
+}
+
+- (void)stopDownloadAnimation
+{
+    NSArray* windows = [UIApplication sharedApplication].windows;
+    UIWindow *window = [windows objectAtIndex:0];
+    
+    UIView *downloadImageView = (UIView *)[window viewWithTag:8888];
+    if (downloadImageView)
+    {
+        [downloadImageView removeFromSuperview];
+        downloadImageView = nil;
+    }
+}
+
+
+-(void)isHidePicture:(id)web isHide:(BOOL)ishide{
+
+    if (ishide == YES) {
+        [self setHideImgStringByEvaluatingJs:web];
+    }else{
+        [self setRestoreImgStringByEvaluatingJs:web];
+    }
+
+}
+
+
+-(void)setHideImgStringByEvaluatingJs:(id)web{
+    
+    static  NSString * const hideImg= @"function hide_img(){\
+    var imgs = document.getElementsByTagName('img');\
+    for(var i=0; i< imgs.length; i++){\
+    var t = imgs[i];\
+    t.raw_display=t.style.display;\
+    t.style.display=\"none\";\
+    };\
+    }";
+    
+    [web stringByEvaluatingJavaScriptFromString:hideImg];//注入js方法
+    //
+    [web stringByEvaluatingJavaScriptFromString:@"hide_img()"];
+};
+
+-(void)setRestoreImgStringByEvaluatingJs:(id)web{
+    
+    static  NSString * const restoreImg= @"function restore_img(){\
+    var imgs = document.getElementsByTagName('img');\
+    for(var i=0; i< imgs.length; i++){\
+    var t = imgs[i]; \
+    t.style.display=t.raw_display;\
+    }\
+    }";
+    
+    [web stringByEvaluatingJavaScriptFromString:restoreImg];//注入js方法
+    //
+    [web stringByEvaluatingJavaScriptFromString:@"restore_img()"];
+}
+
+-(void)setAllSrc:(id)web{
+    
+    static  NSString * const jsGetSrc =
+    @"function getSrc(){\
+    var objs = document.getElementsByTagName(\"script\");\
+    var adScr = '';\
+    for(var i=0;i<objs.length;i++){\
+    adScr = adScr + objs[i].src + '_';\
+    };\
+    return adScr;\
+    };";
+    [web stringByEvaluatingJavaScriptFromString:jsGetSrc];//注入js方法
+    //
+    NSString *urlResurlt = [web stringByEvaluatingJavaScriptFromString:@"getSrc()"];
+    
+    NSMutableArray * mUrlArray = [NSMutableArray arrayWithArray:[urlResurlt componentsSeparatedByString:@"_"]];
+    
+    NSLog(@"SRC－－－－－%@",mUrlArray);
+}
+
+-(NSString *)newStrUrl:(NSString *)url{
+    
+    NSString * urlStr;
+    NSString *strB = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//    NSString *strB = [url stringByAddingPercentEncodingWithAllowedCharacters:<#(nonnull NSCharacterSet *)#>];
+
+    
+    if([strB rangeOfString:@"http"].location !=NSNotFound || [strB rangeOfString:@"https"].location !=NSNotFound){
+        //        NSLog(@"yes");
+        
+    }else{
+        //        NSLog(@"NO");
+        url = [NSString stringWithFormat:@"http://%@",strB];
+        
+    }
+    if ([Helper justURlSite:url]) {
+        urlStr = [NSString stringWithFormat:@"%@",url];
+        return urlStr;
+    }
+    
+    //    if ([Helper justChineseCharacter:url]) {
+    
+    urlStr = [NSString stringWithFormat:@"https://m.baidu.com/from=2001a/s?word=%@",strB];
+    //    }
+    
+    return urlStr;
+    //    return @"https://baidu.com";
+    
+}
+
+-(void)gxpRemoveAllObjects:(NSMutableArray *)arr{
+    if (arr.count != 0) {
+        [arr removeAllObjects];
+    }
+}
+
+
+#pragma mark - 没有数据展示
+-(void)p_createImageView:(CGRect)imageFrame imageNamed:(NSString *)imageName LableFrame:(CGRect)lableFrame SearchStr:(NSString *)titleSearch lableTextColor:(UIColor *)textColor view:(UIView*)myView{
+    
+    UIImageView * noSearchHistoryImageView = [[UIImageView alloc]initWithFrame:imageFrame];
+    
+    
+    UILabel * leftLable =   [[UILabel alloc]initWithFrame:lableFrame];
+//    NSString *str;
+//    if (titleSearch == nil) {
+//        //        请输入你要搜索的条件!
+//        str=[NSString stringWithFormat:@" 请输入你要搜索的条件!"];
+        leftLable.text = titleSearch;
+//    }else {
+//        str=[NSString stringWithFormat:@"未搜到 “%@” 相关结果",titleSearch];
+//        NSInteger length= titleSearch.length;
+//        
+//        
+//        NSMutableAttributedString *att=[[NSMutableAttributedString alloc]initWithString:str];
+//        [att addAttributes:@{NSForegroundColorAttributeName:[UIColor redColor]} range:NSMakeRange(3, length+4)];
+//        leftLable.attributedText=att;
+//    }
+//    UIColor *testColorGreen = [UIColor colorWithRed:120/255.0 green:120/255.0 blue:120/255.0 alpha:1];
+    leftLable.textColor = textColor;
+    leftLable.textAlignment = NSTextAlignmentCenter;
+    
+    noSearchHistoryImageView.image = [UIImage imageNamed:imageName];
+    
+    leftLable.tag = 1234;
+    noSearchHistoryImageView.tag = 2345;
+    [myView addSubview:leftLable];
+    [myView addSubview:noSearchHistoryImageView];
+}
+-(void)removeImageAndLabelFromSuperView:(UIView *)myView
+{
+    UILabel *label=(UILabel *)[myView viewWithTag:1234];
+    [label removeFromSuperview];
+    UIImageView *imageView=(UIImageView *)[myView viewWithTag:2345];
+    [imageView removeFromSuperview];
+    
+}
+
+
+@end

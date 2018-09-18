@@ -1,0 +1,9 @@
+
+
+#import <Foundation/Foundation.h>
+@interface NSString (NSString_Hashing)
+
+//MD5加密
+- (NSString *)MD5Hash;
+
+@end

@@ -1,0 +1,24 @@
+//
+//  STCModel.h
+//  TESTDome
+//
+//  Created by 巩继鹏 on 16/6/13.
+//  Copyright © 2016年 Roger. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface STCModel : NSObject
++ (instancetype)stcModel;
+/**
+ *  判断有没有网 1:是有 0:没有
+ */
+@property (nonatomic,assign) NSInteger netWorkNEW;//!<当前网络状态
+/**
+ *  判断是否使用无痕模式 1:是 0:否
+ */
+@property (nonatomic,assign) NSInteger seamlessBrowsing;//!<无痕浏览状态
+
+
+
+@end

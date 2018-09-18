@@ -1,0 +1,563 @@
+//
+//  ShareNewView.m
+//  DSBrowser
+//
+//  Created by 巩小鹏 on 2016/10/24.
+//  Copyright © 2016年 巩小鹏. All rights reserved.
+//
+
+#import "ShareNewView.h"
+#import "UMSocialUIManager.h"
+#import <UMSocialCore/UMSocialCore.h>
+#import <TencentOpenAPI/QQApiInterface.h> 
+#import "WXApi.h"
+#import "WeiboSDK.h"
+
+/* 
+ title:@[@"微信朋友圈",@"微信好友",@"QQ好友",@"QQ空间",@"新浪微博"] imager:@[@"share_1",@"share_2",@"share_3",@"share_4",@"share_5"] titleColor:[UIColor colorWithHexString:@"#333333"]
+ */
+
+@implementation ShareNewView
+-(instancetype)initWithFrame:(CGRect)frame title:(NSArray *)itemTitleNameArray imager:(NSArray *)itemImageNameArray titleColor:(UIColor *)color{
+    if (self = [super initWithFrame:frame]) {
+        
+        
+        [self p_UI];
+        [self p_layoutFrame];
+        [self p_Init];
+//        [self createKeyboardToolsButton:itemTitleNameArray image:itemImageNameArray LableColor:color];
+        
+    }
+    return self;
+
+}
+-(void)p_Init{
+    NSMutableArray * titleArr = [[NSMutableArray alloc]init];
+    NSMutableArray * imageArr = [[NSMutableArray alloc]init];
+
+    if ([WXApi isWXAppInstalled]) {
+        //没有安装微信
+        NSLog(@"没有安装微信");
+        [titleArr addObject:@"微信朋友圈"];
+        [titleArr addObject:@"微信好友"];
+        [imageArr addObject:@"share_1"];
+        [imageArr addObject:@"share_2"];
+    }
+    if ([QQApiInterface isQQInstalled]) {
+        //没有安装QQ
+        NSLog(@"没有安装QQ");
+        [titleArr addObject:@"QQ好友"];
+        [titleArr addObject:@"QQ空间"];
+        [imageArr addObject:@"share_3"];
+        [imageArr addObject:@"share_4"];
+    }
+    if ([WeiboSDK isWeiboAppInstalled]) {
+        //没有安装新浪微博
+        NSLog(@"没有安装新浪微博");
+        [titleArr addObject:@"新浪微博"];
+        [imageArr addObject:@"share_5"];
+    }
+    
+    [self createKeyboardToolsButton:titleArr image:imageArr LableColor:[UIColor colorWithHexString:@"#333333"]];
+   
+}
+-(void)p_UI{
+//    [self addSubview:self.backgroundGrayView];
+//    [self addSubview:self.shareView];
+//    [self addSubview:self.cancelShare];
+    UIView *window = [[UIApplication sharedApplication] keyWindow];
+//    [window addSubview:self.backgroundGrayView];
+    [window addSubview:self.shareView];
+    [window addSubview:self.cancelShare];
+
+}
+
+-(void)cencelViewClick{
+    [self dismiss];
+}
+
+
+//隐藏
+-(void)p_hideView{
+    
+//    _imageView.frame = CGRectMake(__KSize(30), __kScreenHeight__, __KSize(192), __KSize(282));
+    _shareView.frame =CGRectMake(0,__kScreenHeight__, __kScreenWidth__, __KSize(274));
+    _cancelShare.frame = CGRectMake(0, __kScreenHeight__, __kScreenWidth__, __kTabBarHeight__);
+    
+}
+//展示
+-(void)p_display{
+    
+    _cancelShare.frame = CGRectMake(0, __KSize(940+274), __kScreenWidth__, __KSize(120));
+    _shareView.frame =CGRectMake(0,__KSize(940), __kScreenWidth__, __KSize(274));
+//    _imageView.frame = CGRectMake(__KSize(30), __KSize(602), __KSize(192), __KSize(282));
+    
+}
+
+
+
+-(void)show{
+    UIView *window = [[UIApplication sharedApplication] keyWindow];
+    [window addSubview:self.backgroundGrayView];
+    [window addSubview:self.shareView];
+    [window addSubview:self.cancelShare];
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+    [UIView animateWithDuration:0.3 animations:^{
+        [self p_display];
+        _shareView.alpha = 1;
+        _cancelShare.alpha = 1;
+        _backgroundGrayView.alpha = 1;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+        }
+    }];
+    
+    [UIView commitAnimations];
+}
+
+-(void)dismiss{
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+    [UIView animateWithDuration:0.3 animations:^{
+        [self p_hideView];
+        self.alpha = 0;
+        _shareView.alpha = 0;
+        _cancelShare.alpha = 0;
+        _backgroundGrayView.alpha = 0;
+
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [_shareView removeFromSuperview];
+            [_backgroundGrayView removeFromSuperview];
+            [_cancelShare removeFromSuperview];
+            [self removeFromSuperview];
+            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+
+        }
+    }];
+    [UIView commitAnimations];
+}
+
+-(void)myBlockcompletion:(void(^)())completion {
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        [self p_hideView];
+    } completion:^(BOOL finished) {
+        
+        if (finished) {
+            completion();
+        }
+    }];
+    [UIView commitAnimations];
+}
+
+
+-(void)p_layoutFrame{
+    
+    [self p_hideView];
+}
+
+-(void)show:(CGRect)frame {
+    UIView *window = [[UIApplication sharedApplication] keyWindow];
+    //    [window addSubview:self];
+    [window addSubview:self.shareView];
+    [window addSubview:self.cancelShare];
+
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+    [UIView animateWithDuration:0.3 animations:^{
+        _shareView.alpha = 1;
+        _shareView.frame = frame;
+        
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+        }
+    }];
+    [UIView commitAnimations];
+}
+
+- (void)dismiss:(CGRect)frame
+{
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+    [UIView animateWithDuration:0.2 animations:^{
+        _shareView.frame = frame;
+        self.alpha = 0;
+        _shareView.alpha = 0;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [_shareView removeFromSuperview];
+            [_cancelShare removeFromSuperview];
+            [self removeFromSuperview];
+            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+        }
+    }];
+    [UIView commitAnimations];
+}
+-(void)createKeyboardToolsButton:(NSArray *)itmeArr image:(NSArray *)imageArr LableColor:(UIColor *)color
+{
+    
+    
+    for (NSInteger i = 0; i < itmeArr.count; i++) {
+        
+        UIControl *control = [[UIControl alloc]initWithFrame:CGRectMake(__kScreenWidth__/itmeArr.count*i, __KSize(74), __kScreenWidth__/itmeArr.count, __KSize(126))];
+        //        control.backgroundColor = [UIColor greenColor];
+        control.tag = 401+i;
+        [control addTarget:self action:@selector(shareNewClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_shareView addSubview:control];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((__kScreenWidth__/itmeArr.count-__KSize(74))/2, 0, __KSize(74), __KSize(74))];
+        imageView.tag = 601+i;
+        imageView.image= [UIImage imageNamed:imageArr[i]];
+        [control addSubview:imageView];
+        
+        UILabel * titleLable = [[UILabel alloc]initWithFrame:CGRectMake(0, __KSize(74+30), control.bounds.size.width, __KSize(22))];
+        titleLable.textColor = color;
+        titleLable.text = itmeArr[i];
+        titleLable.font = [UIFont systemFontOfSize:__KSize(22)];
+        titleLable.adjustsFontSizeToFitWidth = YES;
+        titleLable.textAlignment = NSTextAlignmentCenter;
+        titleLable.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+        //        [self sizeToFit];
+        titleLable.tag = 501+i;
+        [control addSubview:titleLable];
+        
+    }
+}
+-(void)shareNewClick:(UIButton *)btn{
+    UMSocialPlatformType platformType;
+
+    NSInteger _indexTyp = 0;
+    _indexTyp = btn.tag - 401;
+    NSLog(@"------%ld",_indexTyp);
+    switch (_indexTyp) {
+        case 0:
+        {
+         platformType = UMSocialPlatformType_WechatTimeLine;
+        }
+            break;
+        case 1:
+        {
+            platformType = UMSocialPlatformType_WechatSession;
+
+        }
+            break;
+        case 2:
+        {
+            platformType = UMSocialPlatformType_QQ;
+
+        }
+            break;
+        case 3:
+        {
+            platformType = UMSocialPlatformType_Qzone;
+
+        }
+            break;
+        case 4:
+        {
+            platformType = UMSocialPlatformType_Sina;
+
+        }
+            break;
+       
+        default:
+            break;
+    }
+    
+    [self shareWithPlatformType:platformType];
+    
+}
+
+-(void)shareWithPlatformType:(UMSocialPlatformType)platformType{
+
+    [self shareWebPageToPlatformType:platformType];
+    
+}
+
+
+
+
+-(UIView *)shareView{
+    if (!_shareView) {
+        _shareView = [[UIView alloc]init];
+        _shareView.backgroundColor = [UIColor whiteColor];
+    }
+    return _shareView;
+}
+
+-(UIView *)backgroundGrayView{
+    if (!_backgroundGrayView) {
+        _backgroundGrayView = [[UIView alloc]init];
+        _backgroundGrayView.frame = CGRectMake(0,0, __kScreenWidth__, __kScreenHeight__);
+        _backgroundGrayView.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.4];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cencelViewClick)];
+        [_backgroundGrayView addGestureRecognizer:tap];
+
+    }
+    return _backgroundGrayView;
+}
+-(UIButton *)cancelShare{
+    if (!_cancelShare) {
+        _cancelShare = [UIButton buttonWithType:UIButtonTypeCustom];
+//        [_cancelShare setImage:[UIImage imageNamed:@"tool_9"] forState:UIControlStateNormal];
+                [_cancelShare setTitle:@"取消" forState:UIControlStateNormal];
+                [_cancelShare setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                _cancelShare.backgroundColor = [UIColor whiteColor];
+        //        _determineBtn.layer.masksToBounds = YES;
+        //        _determineBtn.layer.cornerRadius = 2.0;
+        //        _cancelBtn.layer.borderWidth = 1.0;
+        //        CGColorRef colorref = [UIColor blackColor].CGColor;
+        //        [_cancelBtn.layer setBorderColor:colorref];
+        //        _deleteTMVBtn.jsonTheme.imageWithState(@"ident_14",UIControlStateNormal);
+        
+        _cancelShare.titleLabel.font = [UIFont systemFontOfSize: __KSize(36)];
+        UIView * xian = [[UIView alloc]initWithFrame:CGRectMake(0, 0, __kScreenWidth__, 1)];
+        xian.backgroundColor = [UIColor colorWithHexString:@"#e4e6eb"];
+        [_cancelShare addSubview:xian];
+        
+        
+    }
+    return _cancelShare;
+}
+
+-(void)setToolBackgroundColor:(UIColor *)backgroundColor{
+    
+    _shareView.backgroundColor = backgroundColor;
+    
+}
+
+#pragma mark - 分享逻辑
+//分享文本
+- (void)shareTextToPlatformType:(UMSocialPlatformType)platformType
+{
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    //设置文本
+    messageObject.text = @"社会化组件UShare将各大社交平台接入您的应用，快速武装App。";
+    
+    //调用分享接口
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
+        if (error) {
+            NSLog(@"************Share fail with error %@*********",error);
+        }else{
+            if ([data isKindOfClass:[UMSocialShareResponse class]]) {
+                UMSocialShareResponse *resp = data;
+                //分享结果消息
+                NSLog(@"response message is %@",resp.message);
+                //第三方原始返回的数据
+                NSLog(@"response originalResponse data is %@",resp.originalResponse);
+                
+            }else{
+                NSLog(@"response data is %@",data);
+            }
+        }
+        [self alertWithError:error];
+    }];
+}
+
+//分享图片
+- (void)shareImageToPlatformType:(UMSocialPlatformType)platformType
+{
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    
+    //创建图片内容对象
+    UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
+    //如果有缩略图，则设置缩略图
+    shareObject.thumbImage = [UIImage imageNamed:@"icon"];
+    [shareObject setShareImage:@"http://dev.umeng.com/images/tab2_1.png"];
+    
+    //分享消息对象设置分享内容对象
+    messageObject.shareObject = shareObject;
+    
+    //调用分享接口
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
+        if (error) {
+            NSLog(@"************Share fail with error %@*********",error);
+        }else{
+            if ([data isKindOfClass:[UMSocialShareResponse class]]) {
+                UMSocialShareResponse *resp = data;
+                //分享结果消息
+                NSLog(@"response message is %@",resp.message);
+                //第三方原始返回的数据
+                NSLog(@"response originalResponse data is %@",resp.originalResponse);
+                
+            }else{
+                NSLog(@"response data is %@",data);
+            }
+        }
+        [self alertWithError:error];
+    }];
+}
+
+//分享图片和文字
+- (void)shareImageAndTextToPlatformType:(UMSocialPlatformType)platformType
+{
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    
+    //设置文本
+    messageObject.text = @"社会化组件UShare将各大社交平台接入您的应用，快速武装App。";
+    
+    //创建图片内容对象
+    UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
+    //如果有缩略图，则设置缩略图
+    shareObject.thumbImage = [UIImage imageNamed:@"icon"];
+    [shareObject setShareImage:@"http://dev.umeng.com/images/tab2_1.png"];
+    
+    //分享消息对象设置分享内容对象
+    messageObject.shareObject = shareObject;
+    
+    //调用分享接口
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
+        if (error) {
+            NSLog(@"************Share fail with error %@*********",error);
+        }else{
+            if ([data isKindOfClass:[UMSocialShareResponse class]]) {
+                UMSocialShareResponse *resp = data;
+                //分享结果消息
+                NSLog(@"response message is %@",resp.message);
+                //第三方原始返回的数据
+                NSLog(@"response originalResponse data is %@",resp.originalResponse);
+                
+            }else{
+                NSLog(@"response data is %@",data);
+            }
+        }
+        [self alertWithError:error];
+    }];
+}
+
+//网页分享
+- (void)shareWebPageToPlatformType:(UMSocialPlatformType)platformType
+{
+    if ([self.titleShare isEqualToString:@""]) {
+        self.titleShare =@"本次分享来自于DS浏览器";
+    }
+    
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    
+    //创建网页内容对象r
+    UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:self.titleShare descr:self.titleShare thumImage:[UIImage imageNamed:@"share_1"]];
+    //设置网页地址
+    shareObject.webpageUrl = self.urlShare;
+    
+    //分享消息对象设置分享内容对象
+    messageObject.shareObject = shareObject;
+    
+    //调用分享接口
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
+        if (error) {
+            NSLog(@"************Share fail with error %@*********",error);
+        }else{
+            if ([data isKindOfClass:[UMSocialShareResponse class]]) {
+                UMSocialShareResponse *resp = data;
+                //分享结果消息
+                NSLog(@"response message is %@",resp.message);
+                //第三方原始返回的数据
+                NSLog(@"response originalResponse data is %@",resp.originalResponse);
+                
+            }else{
+                NSLog(@"response data is %@",data);
+            }
+        }
+        [self alertWithError:error];
+    }];
+}
+
+//音乐分享
+- (void)shareMusicToPlatformType:(UMSocialPlatformType)platformType
+{
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    
+    //创建音乐内容对象
+    UMShareMusicObject *shareObject = [UMShareMusicObject shareObjectWithTitle:@"分享标题" descr:@"分享内容描述" thumImage:[UIImage imageNamed:@"icon"]];
+    //设置音乐网页播放地址
+    shareObject.musicUrl = @"http://c.y.qq.com/v8/playsong.html?songid=108782194&source=yqq#wechat_redirect";
+    //            shareObject.musicDataUrl = @"这里设置音乐数据流地址（如果有的话，而且也要看所分享的平台支不支持）";
+    //分享消息对象设置分享内容对象
+    messageObject.shareObject = shareObject;
+    
+    //调用分享接口
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
+        if (error) {
+            NSLog(@"************Share fail with error %@*********",error);
+        }else{
+            if ([data isKindOfClass:[UMSocialShareResponse class]]) {
+                UMSocialShareResponse *resp = data;
+                //分享结果消息
+                NSLog(@"response message is %@",resp.message);
+                //第三方原始返回的数据
+                NSLog(@"response originalResponse data is %@",resp.originalResponse);
+                
+            }else{
+                NSLog(@"response data is %@",data);
+            }
+        }
+        [self alertWithError:error];
+    }];
+    
+}
+
+//视频分享
+- (void)shareVedioToPlatformType:(UMSocialPlatformType)platformType
+{
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    
+    //创建视频内容对象
+    UMShareVideoObject *shareObject = [UMShareVideoObject shareObjectWithTitle:@"分享标题" descr:@"分享内容描述" thumImage:[UIImage imageNamed:@"icon"]];
+    //设置视频网页播放地址
+    shareObject.videoUrl = @"http://video.sina.com.cn/p/sports/cba/v/2013-10-22/144463050817.html";
+    //            shareObject.videoStreamUrl = @"这里设置视频数据流地址（如果有的话，而且也要看所分享的平台支不支持）";
+    
+    //分享消息对象设置分享内容对象
+    messageObject.shareObject = shareObject;
+    
+    //调用分享接口
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
+        if (error) {
+            NSLog(@"************Share fail with error %@*********",error);
+        }else{
+            if ([data isKindOfClass:[UMSocialShareResponse class]]) {
+                UMSocialShareResponse *resp = data;
+                //分享结果消息
+                NSLog(@"response message is %@",resp.message);
+                //第三方原始返回的数据
+                NSLog(@"response originalResponse data is %@",resp.originalResponse);
+                
+            }else{
+                NSLog(@"response data is %@",data);
+            }
+        }
+        [self alertWithError:error];
+    }];
+}
+
+
+
+- (void)alertWithError:(NSError *)error
+{
+    NSString *result = nil;
+    if (!error) {
+        result = [NSString stringWithFormat:@"Share succeed"];
+    }
+    else{
+        if (error) {
+            result = [NSString stringWithFormat:@"Share fail with error code: %d\n",(int)error.code];
+        }
+        else{
+            result = [NSString stringWithFormat:@"Share fail"];
+        }
+    }
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"share"
+                                                    message:result
+                                                   delegate:nil
+                                          cancelButtonTitle:NSLocalizedString(@"sure", @"确定")
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
+
+@end

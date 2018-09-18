@@ -1,0 +1,49 @@
+//
+//  SubViewController.m
+//  TESTDome
+//
+//  Created by 巩继鹏 on 16/6/10.
+//  Copyright © 2016年 Roger. All rights reserved.
+//
+
+#import "SubViewController.h"
+
+@interface SubViewController ()
+
+@end
+
+@implementation SubViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.myView.frame = CGRectMake(0, __kNavigationBarHeight__, __kScreenWidth__, __kOriginalHeight__);
+    
+    if (_isHiedNaivBack == NO) {
+        UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        backBtn.frame = CGRectMake(0, 0, 30, 44);
+        [backBtn setImage:[UIImage imageNamed:@"history_1"] forState:UIControlStateNormal];
+        [backBtn addTarget:self action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
+        self.baseNavigationBar.leftBarButtons = @[backBtn];
+    }
+}
+- (void)backAction:(UIButton *)sender{
+    
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

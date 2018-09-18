@@ -1,0 +1,44 @@
+//
+//  MyTabBarView.h
+//  Product Temp
+//
+//  Created by jianjie on 16/1/8.
+//  Copyright © 2016年 jianjie. All rights reserved.
+//
+
+#import "BaseView.h"
+
+@protocol MyTabBarViewBtnClickedDelegate <NSObject>
+
+- (void)myTabBarViewBtnClicked:(NSInteger)index;
+
+@end
+
+
+@interface MyTabBarView : BaseView
+
+@property(nonatomic, strong) UIView *bgView;       //!<背景图片
+@property(nonatomic, strong) NSArray *itemImageNameArray;    //!<项目图片数组
+@property(nonatomic, strong) NSArray *itemSeleImageNameArray;//!<选中项目图片数组
+@property(nonatomic, strong) NSArray *itemTitleNameArray;    //!<项目名称数组
+
+@property(nonatomic, assign) id<MyTabBarViewBtnClickedDelegate>delegate;
+
+/**
+ *  @author XiaoJianJie, 16-01-10 15:01:06
+ *
+ *  @brief 初始化自定义菜单栏控件
+ *
+ *  @param frame              位置信息
+ *  @param itemImageNameArray 所有图片名字数组
+ *  @param itemTitleNameArray 所有标题名字数组
+ *
+ *  @return 返回一个实例
+ */
+- (instancetype)initWithFrame:(CGRect)frame
+           itemImageNameArray:(NSArray *)itemImageNameArray
+       itemSeleImageNameArray:(NSArray *)itemSeleImageNameArray
+           itemTitleNameArray:(NSArray *)itemTitleNameArray;
+
+- (void)createTabBarButton;
+@end

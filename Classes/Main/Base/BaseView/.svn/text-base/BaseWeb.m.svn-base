@@ -1,0 +1,60 @@
+//
+//  BaseWeb.m
+//  Esou
+//
+//  Created by 巩小鹏 on 16/9/13.
+//  Copyright © 2016年 巩小鹏. All rights reserved.
+//
+
+#import "BaseWeb.h"
+@interface BaseWeb ()
+
+
+@end
+@implementation BaseWeb
+
+-(instancetype)initWithFrame:(CGRect)frame{
+    if (self=[super initWithFrame:frame]) {
+        [self p_set];
+    }
+    return self;
+}
+
+-(void)p_set{
+    
+  
+    switch ([STCModel stcModel].netWorkNEW) {
+        case 0:{
+        
+            [self newLoadHTML];
+        }
+            break;
+        case 1:{
+            
+            [self newLoadRequest];
+
+        }
+            break;
+        default:
+            break;
+    }
+    
+    self.backgroundColor = [UIColor whiteColor];
+    self.frame = self.bounds;
+
+}
+
+-(void)newLoadRequest{
+ [self loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",__kURLWeb__]]]];
+}
+-(void)newLoadHTML{
+    NSString *path = [[NSBundle mainBundle] bundlePath];
+    NSURL *baseURL = [NSURL fileURLWithPath:path];
+    NSString * htmlPath = [[NSBundle mainBundle] pathForResource:@"sh-pear"
+                                                          ofType:@"html"];
+    NSString * htmlCont = [NSString stringWithContentsOfFile:htmlPath
+                                                    encoding:NSUTF8StringEncoding
+                                                       error:nil];
+    [self loadHTMLString:htmlCont baseURL:baseURL];
+}
+@end

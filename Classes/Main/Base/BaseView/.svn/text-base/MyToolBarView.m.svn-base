@@ -1,0 +1,114 @@
+//
+//  MyToolBarView.m
+//  Esou
+//
+//  Created by 巩小鹏 on 16/8/26.
+//  Copyright © 2016年 巩小鹏. All rights reserved.
+//
+
+#import "MyToolBarView.h"
+@interface MyToolBarView ()
+{
+    NSArray *_arrImage;
+}
+
+@end
+
+@implementation MyToolBarView
+
+
+
+
+//初始化方法
+#pragma mark - InitView
+-(instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame])
+    {
+//        [self p_UI];
+    }
+    return self;
+}
+
+-(void)p_UI{
+
+    
+}
+
+-(void)p_layoutFrame{
+
+
+}
+
+-(void)createToolBarImagerArr:(NSArray *)imageTBArr title:(NSArray *)titleTBArr titleColor:(UIColor *)color
+{
+   static NSInteger _itme = 0;
+    if (imageTBArr.count != 0) {
+        _itme= imageTBArr.count;
+
+    }
+    if (titleTBArr.count !=0) {
+        _itme= titleTBArr.count;
+
+    }
+    
+    for (NSInteger i = 0; i < _itme; i++) {
+        
+        UIControl *control = [[UIControl alloc]initWithFrame:CGRectMake(__kScreenWidth__/_itme*i, 0, __kScreenWidth__/_itme, __KSize(88))];
+        control.backgroundColor = [UIColor clearColor];
+        control.tag = 101+i;
+        [control addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:control];
+         if (imageTBArr.count != 0) {
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(__kScreenWidth__/_itme/2-__KSize(21), __KSize(22), __KSize(21*2), __KSize(21*2))];
+        imageView.tag = 33333+i;
+        
+        [control addSubview:imageView];
+//        imageView.image = [UIImage imageNamed:imageTBArr[i]];
+             NSString *str = [NSString stringWithFormat:@"ident%ld",i];
+             imageView.jsonTheme.image(str);
+             
+             if (i == 4) {
+                 UILabel *numLable = [[UILabel alloc]initWithFrame:CGRectMake(__KSize(26/2-4), __KSize(16), __KSize(42/2), __KSize(42/2))];
+                 numLable.tag = 10000;
+                 numLable.text = @"1";
+                 numLable.font = [UIFont systemFontOfSize:__KSize(22)];
+                 numLable.textColor = [UIColor colorWithHexString:@"#5c5d5f"];
+                 numLable.adjustsFontSizeToFitWidth = YES;
+                 numLable.textAlignment = NSTextAlignmentCenter;
+                 numLable.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+                 [self sizeToFit];
+
+                 [imageView addSubview:numLable];
+             }
+         }
+        
+        if (titleTBArr.count != 0) {
+            UILabel * titleLable = [[UILabel alloc]initWithFrame:CGRectMake(__kScreenWidth__/_itme/2-21, (self.bounds.size.height-42)/2, 21*2, 21*2)];
+            
+            titleLable.textColor = color;
+            titleLable.text = titleTBArr[i];
+            [control addSubview:titleLable];
+        }
+    }
+
+}
+
+-(void)btnClick:(UIButton *)btn{
+    if ([self.delegate respondsToSelector:@selector(myToolBarViewBtnClicked:)])
+    {
+        [self.delegate myToolBarViewBtnClicked:btn.tag - 100];
+    }
+}
+
+- (void)setToolBarHidden:(BOOL)isHidden{
+
+    CGSize size = self.frame.size;
+    if (isHidden) {
+        self.frame = CGRectMake(0, -size.height, size.width, size.height);
+    }else{
+        self.frame = __kTabBarFrame__;
+    }
+}
+
+@end

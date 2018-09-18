@@ -1,0 +1,110 @@
+//
+//  SearchView.m
+//  星火作文
+//
+//  Created by 巩继鹏 on 15/11/25.
+//  Copyright © 2015年 com.juwan.easyzw. All rights reserved.
+//
+#define kLightblueColor [UIColor colorWithRed:40/255.0 green:159/255.0 blue:217/255.0 alpha:1]
+
+#import "SearchView.h"
+
+@interface SearchView () 
+
+
+@end
+@implementation SearchView
+
+-(instancetype)initWithFrame:(CGRect)frame{
+    if (self=[super initWithFrame:frame]) {
+        [self lazyCreateUI];
+    }
+    return self;
+}
+
+#pragma mark - initSubviews
+
+- (void)lazyCreateUI
+{
+    [self addSubview:self.bgView];
+    [self.bgView addSubview:self.searchTextField];
+    [self addSubview:self.searchBtn];
+    [self p_layoutSubviews];
+}
+
+
+#pragma mark - layoutSubviews
+
+-(void)p_layoutSubviews
+{
+    
+    _bgView.frame=CGRectMake(0, 0,__kScreenWidth__, __kNavigationBarHeight__);
+//    _searchBtn.frame=CGRectMake(__kScreenWidth__-55, (70-50)/2, 50, 50);
+    
+}
+
+
+-(UIView *)bgView
+{
+    if (_bgView==nil)
+    {
+        _bgView=[[UIView alloc]init];
+        _bgView.layer.shadowOffset=CGSizeMake(0, 1);
+        _bgView.layer.shadowOpacity=0.3;
+//        _bgView.backgroundColor = [[UIColor grayColor]colorWithAlphaComponent:0.2];
+    }
+    return _bgView;
+}
+-(UIButton *)searchBtn
+{
+    if (_searchBtn==nil)
+    {
+        _searchBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+//        UIFont *iconfont=[UIFont fontWithName:@"iconfont" size:__KSize(16)];
+        _searchBtn.titleLabel.font=[UIFont systemFontOfSize:__KSize(24)];
+       _searchBtn.layer.cornerRadius = 5.0;
+        _searchBtn.userInteractionEnabled = YES;
+    }
+    return _searchBtn;
+}
+
+-(UITextField *)searchTextField
+{
+    if (_searchTextField==nil)
+    {
+        _searchTextField=[[UITextField alloc]init];
+        UIView *aview = [[UIView alloc]initWithFrame:CGRectMake(__KSize(14), __KSize(66-33)/2, __KSize(26+28), __KSize(33))];
+        [aview addSubview:self.imgv];
+        _searchTextField.leftView = aview;
+        _searchTextField.leftViewMode = UITextFieldViewModeAlways;
+////      _searchTextField.frame = CGRectMake(10, 10, (__kScreenWidth__-(40+30)), 50);
+//        _searchTextField.backgroundColor = [UIColor whiteColor];
+        _searchTextField.borderStyle=UITextBorderStyleNone;
+////        _searchTextField.placeholder = @"搜文章";
+//        _searchTextField.rightViewMode=UITextFieldViewModeAlways;
+        _searchTextField.userInteractionEnabled=YES;
+        _searchTextField.layer.masksToBounds=YES;
+//      _searchTextField.delegate=self;
+//        _searchTextField.layer.borderColor=[[UIColor colorWithHexString:@"#e0e0e0"] CGColor];
+        _searchTextField.layer.jsonTheme.borderColor(@"ident3");
+        _searchTextField.layer.borderWidth = 1.0f;
+         _searchTextField.layer.cornerRadius = 2.0f;
+        //        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        //        CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 1,0, 0, 1 });
+        //        [_searchTextField.layer setBorderColor:colorref];
+        //        [_searchTextField resignFirstResponder];
+        _searchTextField.font = [UIFont systemFontOfSize:__KSize(28)];
+    }
+    return _searchTextField;
+}
+
+-(UIImageView *)imgv{
+    if (!_imgv) {
+        _imgv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_g"]];
+        _imgv.frame = CGRectMake(__KSize(15), __KSize(0), __KSize(28), __KSize(30));
+
+    }
+    return _imgv;
+}
+
+@end

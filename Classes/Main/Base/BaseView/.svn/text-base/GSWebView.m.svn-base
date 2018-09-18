@@ -1,0 +1,392 @@
+//
+//  GSWebView.m
+//  GSwebView
+//
+//  Created by 巩小鹏 on 16/10/10.
+//  Copyright © 2016年 巩小鹏. All rights reserved.
+//
+#define __kScreenWidth__ [[UIScreen mainScreen] bounds].size.width
+#define __kScreenHeight__ [[UIScreen mainScreen] bounds].size.height
+
+#import "GSWebView.h"
+
+
+@interface GSWebView ()<NJKWebViewProgressDelegate,SlideLeftOrRightDelegate>
+
+{
+    NJKWebViewProgress *_progressProxy;
+
+}
+@property (nonatomic, strong) NSTimer *fakeProgressTimer;
+@property (nonatomic, assign) BOOL uiWebViewIsLoading;
+@property (nonatomic, strong) NSURL *uiWebViewCurrentURL;
+@property (nonatomic, strong) NSURL *URLToLaunchWithPermission;
+//@property (nonatomic, strong) UIAlertView *externalAppPermissionAlertView;
+
+
+
+@end
+
+@implementation GSWebView
+
+#pragma mark --Initializers
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+    
+            self.uiWebView = [[UIWebView alloc] init];
+            self.backgroundColor = [UIColor redColor];
+        
+            [self.uiWebView setFrame:frame];
+            [self.uiWebView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+            [self.uiWebView setDelegate:self];
+            [self.uiWebView setMultipleTouchEnabled:YES];
+            [self.uiWebView setAutoresizesSubviews:YES];
+            [self.uiWebView setScalesPageToFit:YES];
+            [self.uiWebView.scrollView setAlwaysBounceVertical:YES];
+            self.uiWebView.scrollView.bounces = NO;
+        
+            [self addSubview:self.pan];
+            [self addSubview:self.uiWebView];
+            [self.uiWebView addSubview:self.progressView];
+            [self p_set];
+                                         
+                                         
+                                        
+//        self.progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+//        [self.progressView setTrackTintColor:[UIColor colorWithWhite:1.0f alpha:0.0f]];
+//        [self.progressView setFrame:CGRectMake(0, 22, self.frame.size.width, self.progressView.frame.size.height)];
+//        [self.progressView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
+//        
+//        
+//        //设置进度条颜色
+//        [self setTintColor:[UIColor colorWithRed:0.400 green:0.863 blue:0.133 alpha:1.000]];
+//        [self addSubview:self.progressView];
+        
+        
+    }
+    return self;
+}
+-(NJKWebViewProgressView *)progressView{
+    if(!_progressView){
+        
+        //        _progressView = [[NJKWebViewProgressView alloc] initWithFrame:CGRectMake(0,__kNavigationBarHeight__,__kScreenWidth__,__KSize(2))];
+        //        _progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+        //
+        _progressProxy = [[NJKWebViewProgress alloc] init];
+        _uiWebView.delegate = _progressProxy;
+        _progressProxy.webViewProxyDelegate = self;
+        _progressProxy.progressDelegate = self;
+        
+        
+        //        CGRect navBounds = self.navigationController.navigationBar.bounds;
+        CGRect barFrame = CGRectMake(0,
+                                     self.uiWebView.bounds.size.height-self.uiWebView.bounds.size.height,
+                                     __kScreenWidth__,
+                                     2);
+        _progressView = [[NJKWebViewProgressView alloc] initWithFrame:barFrame];
+        _progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+        [_progressView setProgress:0 animated:YES];
+        //        [self.navigationController.navigationBar addSubview:_progressView];
+    }
+    
+    return _progressView;
+}
+
+-(void)p_set{
+    
+    
+    switch ([STCModel stcModel].netWorkNEW) {
+        case 0:{
+            
+            [self newLoadHTML];
+        }
+            break;
+        case 1:{
+            
+            [self newLoadRequest];
+            
+        }
+            break;
+        default:
+            break;
+    }
+    
+//    self.backgroundColor = [UIColor whiteColor];
+//    self.frame = self.bounds;
+    
+}
+#pragma mark - Public Interface
+
+-(void)newLoadRequest{
+    [self loadURLString:__kURLWeb__];
+}
+-(void)newLoadHTML{
+    NSString *path = [[NSBundle mainBundle] bundlePath];
+    NSURL *baseURL = [NSURL fileURLWithPath:path];
+    NSString * htmlPath = [[NSBundle mainBundle] pathForResource:@"sh-pear"
+                                                          ofType:@"html"];
+    NSString * htmlCont = [NSString stringWithContentsOfFile:htmlPath
+                                                    encoding:NSUTF8StringEncoding
+                                                       error:nil];
+    [self.uiWebView loadHTMLString:htmlCont baseURL:baseURL];
+}
+
+
+- (void)loadRequest:(NSURLRequest *)request {
+        [self.uiWebView loadRequest:request];
+}
+
+- (void)loadURL:(NSURL *)URL {
+    [self loadRequest:[NSURLRequest requestWithURL:URL]];
+}
+
+- (void)loadURLString:(NSString *)URLString {
+    NSURL *URL = [NSURL URLWithString:URLString];
+    [self loadURL:URL];
+}
+
+- (void)loadHTMLString:(NSString *)HTMLString {
+        [self.uiWebView loadHTMLString:HTMLString baseURL:nil];
+}
+
+
+
+- (void)setTintColor:(UIColor *)tintColor {
+    _tintColor = tintColor;
+    [self.progressView setTintColor:tintColor];
+}
+
+- (void)setBarTintColor:(UIColor *)barTintColor {
+    _barTintColor = barTintColor;
+}
+
+#pragma  mark - 添加左划右划手势
+
+-(void)swipeRight{
+    [self GSGoForward];
+}
+
+-(void)swipeLeft{
+    
+    [self GSGoBack];
+}
+-(void)GSGoBack{
+//    NSLog(@"后退");
+    if (_uiWebView.canGoBack) {
+        [_uiWebView goBack];
+    }
+}
+-(void)GSGoForward{
+   // NSLog(@"前进");
+    if (_uiWebView.canGoForward) {
+        [_uiWebView goForward];
+    }
+}
+-(void)GSRelod{
+//    NSLog(@"刷新");
+        [_uiWebView reload];
+}
+#pragma mark - UIWebViewDelegate
+
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    if(webView == self.uiWebView) {
+        [self.gsDelegate gswebViewDidStartLoad:self];
+        
+    }
+}
+#pragma mark - NJKWebViewProgressDelegate
+-(void)webViewProgress:(NJKWebViewProgress *)webViewProgress updateProgress:(float)progress
+{
+    
+    [_progressView setProgress:progress animated:YES];
+    //    self.title = [_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+}
+
+//监视请求
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+
+    
+    if(webView == self.uiWebView) {
+        
+//        NSString *str = request.URL.absoluteString;
+        
+//        if ([str hasPrefix:@"myweb:imageClick:"]) {
+//            str = [str stringByReplacingOccurrencesOfString:@"myweb:imageClick:"
+//                                                 withString:@""];
+//            NSArray * imageUrlArr = [str  componentsSeparatedByString:@","];
+//            
+//            [WebImgScrollView showImageWithImageArr:imageUrlArr];
+//            
+//        }
+//
+
+//        if(![self externalAppRequiredToOpenURL:request.URL]) {
+            self.uiWebViewCurrentURL = request.URL;
+            self.uiWebViewIsLoading = YES;
+            
+//            [self fakeProgressViewStartLoading];
+        
+            
+            //back delegate
+            [self.gsDelegate gswebView:self shouldStartLoadWithURL:request.URL];
+            return YES;
+
+           }
+    return NO;
+}
+
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    
+    [DEFAULTS setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
+    [DEFAULTS setBool:NO forKey:@"WebKitDiskImageCacheEnabled"];//自己添加的，原文没有提到。
+    [DEFAULTS setBool:NO forKey:@"WebKitOfflineWebApplicationCacheEnabled"];//自己添加的，原文没有提到。
+    [DEFAULTS synchronize];
+    
+    if (webView.canGoBack) {
+        self.showscanGoBack = YES;
+        _pan.isHideLeft = YES;
+    }else{
+        self.showscanGoBack = NO;
+         _pan.isHideLeft = NO;
+    }
+    if (webView.canGoForward) {
+        self.showsCanGoForward = YES;
+        _pan.isHideRight = YES;
+    }else{
+        self.showsCanGoForward = NO;
+        _pan.isHideRight = NO;
+    }
+    
+    NSLog(@"alert : currwebview is UIWebView");
+    if(webView == self.uiWebView) {
+        if(!self.uiWebView.isLoading) {
+            self.uiWebViewIsLoading = NO;
+            
+//            [self fakeProgressBarStopLoading];
+        }
+        
+        //back delegate
+        [self.gsDelegate gswebView:self didFinishLoadingURL:self.uiWebView.request.URL];
+//        [self webImageScrollJS:webView];
+    }
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+    
+    if(webView == self.uiWebView) {
+        if(!self.uiWebView.isLoading) {
+            self.uiWebViewIsLoading = NO;
+            
+//            [self fakeProgressBarStopLoading];
+        }
+        
+        //back delegate
+        
+        [self.gsDelegate gswebView:self didFailToLoadURL:self.uiWebView.request.URL error:error];
+    }
+}
+
+#pragma mark - External App Support
+//
+//- (BOOL)externalAppRequiredToOpenURL:(NSURL *)URL {
+//    NSSet *validSchemes = [NSSet setWithArray:@[@"http", @"https",@"file"]];
+//    return ![validSchemes containsObject:URL.scheme];
+//}
+//
+//- (void)launchExternalAppWithURL:(NSURL *)URL {
+//    self.URLToLaunchWithPermission = URL;
+//    if (![self.externalAppPermissionAlertView isVisible]) {
+//        [self.externalAppPermissionAlertView show];
+//    }
+//    
+//}
+//
+//#pragma mark - UIAlertViewDelegate
+//
+//- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+//    if(alertView == self.externalAppPermissionAlertView) {
+//        if(buttonIndex != alertView.cancelButtonIndex) {
+//            [[UIApplication sharedApplication] openURL:self.URLToLaunchWithPermission];
+//        }
+//        self.URLToLaunchWithPermission = nil;
+//    }
+//}
+#pragma mark - Fake Progress Bar Control (UIWebView)
+
+- (void)fakeProgressViewStartLoading {
+    [self.progressView setProgress:0.0f animated:NO];
+    [self.progressView setAlpha:1.0f];
+    
+    if(!self.fakeProgressTimer) {
+        
+        self.fakeProgressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/60.0f target:self selector:@selector(fakeProgressTimerDidFire:) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:self.fakeProgressTimer forMode:NSRunLoopCommonModes];
+//        [[NSRunLoop currentRunLoop] run];
+        
+    }
+}
+
+- (void)fakeProgressBarStopLoading {
+    if(self.fakeProgressTimer) {
+        [self.fakeProgressTimer invalidate];
+    }
+    
+    if(self.progressView) {
+        [self.progressView setProgress:1.0f animated:YES];
+        [UIView animateWithDuration:0.3f delay:0.3f options:UIViewAnimationOptionCurveEaseOut animations:^{
+            [self.progressView setAlpha:0.0f];
+        } completion:^(BOOL finished) {
+            [self.progressView setProgress:0.0f animated:NO];
+        }];
+    }
+}
+
+- (void)fakeProgressTimerDidFire:(id)sender {
+    CGFloat increment = 0.005/(self.progressView.progress + 0.2);
+    if([self.uiWebView isLoading]) {
+        CGFloat progress = (self.progressView.progress < 0.75f) ? self.progressView.progress + increment : self.progressView.progress + 0.0005;
+        if(self.progressView.progress < 0.95) {
+            [self.progressView setProgress:progress animated:YES];
+        }
+    }
+}
+
+-(void)webImageScrollJS:(id)webView{
+
+    NSString *str = @"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '100%'";
+    [webView stringByEvaluatingJavaScriptFromString:str];
+    
+    //js方法遍历图片添加点击事件 返回所有图片
+    static  NSString * const jsGetImages =
+    @"function getImages(){\
+    var srcs = [];\
+    var objs = document.getElementsByTagName(\"img\");\
+    for(var i=0;i<objs.length;i++){\
+    srcs[i] = objs[i].src;\
+    };\
+    for(var i=0;i<objs.length;i++){\
+    objs[i].onclick=function(){\
+    document.location=\"myweb:imageClick:\"+srcs;\
+    };\
+    };\
+    return objs.length;\
+    };";
+    
+    [webView stringByEvaluatingJavaScriptFromString:jsGetImages];//注入js方法
+    [webView stringByEvaluatingJavaScriptFromString:@"getImages()"];
+}
+
+-(PanLoad *)pan{
+    if (!_pan) {
+        _pan = [[PanLoad alloc]initWithFrame:CGRectMake(0, 0, __kScreenWidth__, __kScreenHeight__)];
+        _pan.slideDelegate =self;
+        [self.pan setPanGestureRecognizer:self.uiWebView];
+    }
+    return _pan;
+}
+
+@end

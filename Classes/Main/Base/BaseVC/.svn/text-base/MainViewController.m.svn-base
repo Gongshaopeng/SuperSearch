@@ -1,0 +1,65 @@
+//
+//  MainViewController.m
+//  DSBrowser
+//
+//  Created by 巩小鹏 on 2016/10/19.
+//  Copyright © 2016年 巩小鹏. All rights reserved.
+//
+
+#import "MainViewController.h"
+
+@implementation MainViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    [self m_UI];
+    [self m_Frame];
+}
+-(void)m_UI{
+    [self.view addSubview:self.myMainView];
+
+}
+-(void)m_Frame{
+    _myMainView.frame = CGRectMake(0, 0, __kScreenWidth__ , __kScreenHeight__-__KSize(106));
+}
+
+- (UIView *)myMainView
+{
+    if (_myMainView == nil) {
+        _myMainView = [[UIView alloc]init];
+        _myMainView.backgroundColor = [UIColor whiteColor];
+    }
+    return _myMainView;
+}
+-(NSString *)newStrUrl:(NSString *)url{
+    
+    NSString * urlStr;
+    NSString *strB = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    //    NSString *strB = [url stringByAddingPercentEncodingWithAllowedCharacters:<#(nonnull NSCharacterSet *)#>];
+    
+    
+    if([strB rangeOfString:@"http"].location !=NSNotFound || [strB rangeOfString:@"https"].location !=NSNotFound){
+        //        NSLog(@"yes");
+        
+    }else{
+        //        NSLog(@"NO");
+        url = [NSString stringWithFormat:@"http://%@",strB];
+        
+    }
+    if ([Helper justURlSite:url]) {
+        urlStr = [NSString stringWithFormat:@"%@",url];
+        return urlStr;
+    }
+    
+    //    if ([Helper justChineseCharacter:url]) {
+    
+    urlStr = [NSString stringWithFormat:@"https://m.baidu.com/from=2001a/s?word=%@",strB];
+    //    }
+    
+    return urlStr;
+    //    return @"https://baidu.com";
+    
+}
+
+@end

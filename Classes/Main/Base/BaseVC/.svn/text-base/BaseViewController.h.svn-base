@@ -1,0 +1,82 @@
+//
+//  BaseViewController.h
+//  TESTDome
+//
+//  Created by 巩继鹏 on 16/6/7.
+//  Copyright © 2016年 Roger. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "BaseNavigationBar.h"
+
+@interface BaseViewController : UIViewController<UIAlertViewDelegate>
+
+@property (nonatomic,strong) BaseNavigationBar *baseNavigationBar;
+@property (nonatomic, strong) UIView* myView;//最底层的view
+@property (nonatomic, strong) UIView* xian;//!<线
+
+@property (nonatomic, strong) UIAlertView * alertView;//弹框警告
+
+@property (nonatomic,strong) NSString * getTimeNow;//!<最近时间
+@property (nonatomic,strong) NSString * getDetailedTimeNow;//!<详细时间
+
+// 弹出警告框
+- (void)showTitle:(NSString *)title
+          message:(NSString *)message
+      titleButton:(NSString *)titleBth;
+
+
+- (void)createRightBarButtonWithImageName:(NSString *)imageName WithSelector:(SEL)selector;
+- (void)createRightBarButtonWithRightBarButton:(NSString *)btnName WithSelector:(SEL)selector;
+- (void)createRightBarButtonWithLeftBarButton:(NSString *)btnName WithSelector:(SEL)selector;
+- (void)createLeftBarButtonWithImageName:(NSString *)imageName WithSelector:(SEL)selector;
+- (void)createLeftBarButton:(NSString *)btnName img:(NSString *)leftImg WithSelector:(SEL)selector;
+- (void)createRightBarButton:(NSString *)btnName WithSelector:(SEL)selector;
+
+- (void)downloadAnimation;
+- (void)stopDownloadAnimation;
+- (void)createHUDWithText:(NSString *)text;
+- (void)showProgress;
+- (void)hideProgress;
+//登陆页
+-(void)presentLogIn;
+//无图浏览
+-(void)isHidePicture:(id)web isHide:(BOOL)ishide;
+-(void)setHideImgStringByEvaluatingJs:(id)web;//!<隐藏图片
+-(void)setRestoreImgStringByEvaluatingJs:(id)web;//!<显示图片
+-(void)setAllSrc:(id)web;
+
+/**
+ *  搜索类型区分
+ *
+ *  @param url 传入字符串url
+ *
+ *  @return 返回搜索url
+ */
+-(NSString *)newStrUrl:(NSString *)url;
+/**
+ *  删除数组
+ *
+ *  @param arr 当前数组对象
+ */
+-(void)gxpRemoveAllObjects:(NSMutableArray *)arr;
+
+/**
+ *  空白页展示图
+ *
+ *  @param imageFrame  图片位置大小
+ *  @param imageName   图片名字
+ *  @param lableFrame  提示语位置
+ *  @param titleSearch 提示语内容
+ *  @param textColor   提示语字体颜色
+ *  @param myView      当前视图
+ */
+-(void)p_createImageView:(CGRect)imageFrame imageNamed:(NSString *)imageName LableFrame:(CGRect)lableFrame SearchStr:(NSString *)titleSearch lableTextColor:(UIColor *)textColor view:(UIView*)myView;
+/**
+ *  删除空白视图
+ *
+ *  @param myView 当前视图
+ */
+-(void)removeImageAndLabelFromSuperView:(UIView *)myView;
+
+@end

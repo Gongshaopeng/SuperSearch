@@ -1,0 +1,87 @@
+//
+//  PrefixHeader.pch
+//  Esou
+//
+//  Created by 巩小鹏 on 16/8/26.
+//  Copyright © 2016年 巩小鹏. All rights reserved.
+//
+
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+#import <Availability.h>
+
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+
+#define MAS_SHORTHAND
+#define MAS_SHORTHAND_GLOBALS
+
+//将全局的写在这里
+
+#import "ConfigData.h"
+#import "Defaults.h" 
+#import "Night.h"
+#import "Config.h" //配置
+#import "GSUNShareID.h" //分享配置参数
+#import "UrlKey.h" //接口地址
+#import "Product Define.h"
+#import "SSNotificationCenterName.h"//通知
+#import "SSConsts.h" // 常量
+#import "LLSearchVCConst.h"
+
+
+//类扩展
+#import "UIColor+Hex.h"
+#import "NSString+GSString.h"
+#import "NSString+Hashing.h"
+#import "NSDictionary+GSDictionary.h"
+#import "UIView+DCPagerFrame.h" // UIView分类
+#import "SSNotificationCenterName.h"
+#import "UIImage+ImageCornerRadius.h"
+
+//工具类
+#import "NewTimeTool.h"
+#import "STool.h"
+#import "SSObjManager.h"
+#import "Helper.h"
+#import "SSpeedy.h"////便捷方法
+#import "ALBCPush.h"
+#import "Reachability.h"
+#import "NetworkUnit.h"
+#import "GOpenUrl.h"
+#import "IphoneType.h"
+#import "GSUMLogin.h"
+
+//第三方库
+#import "JKMarketDefine.h"
+#import "Masonry.h"
+#import "MJRefresh.h"
+#import "MBProgressHUD.h"
+#import "EasyShowView.h"
+#import "GSKeychain.h"
+
+//模型Model
+#import "STCModel.h"
+#import "GS_CacheModel.h"
+#import "TBUSerModel.h"
+
+//数据集合
+#import "EntireManageMent.h"
+
+
+//网页缓存
+
+
+
+#endif
+
+#endif

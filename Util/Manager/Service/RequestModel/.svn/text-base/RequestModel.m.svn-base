@@ -1,0 +1,51 @@
+//
+//  RequestModel.m
+//  如意夺宝
+//
+//  Created by allen on 16/4/9.
+//  Copyright © 2016年 com.juwang.rydb. All rights reserved.
+//
+
+#import "RequestModel.h"
+
+@interface RequestModel()
+
+@end
+
+@implementation RequestModel
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.data = @{};
+//        self.page = @"";
+//        self.pageSize = @"";
+//        self.token = @"";
+//        self.ver = __kInterfaceVer__;
+//        self.appkey = __kAppKey__;
+//        self.from = @"";
+//        self.device_from = @"";
+    }
+    return self;
+}
+
++ (instancetype)modelWithDictionary:(NSDictionary *)data page:(NSString *)page pageSize:(NSString *)pageSize{
+    RequestModel *model = [RequestModel new];
+    model.data = data?:@{};
+//    model.page = page?:@"";
+//    model.pageSize = pageSize?:@"";
+//    model.token = [SSKeychain passwordForService:__kKeyChainServer__ account:__kKeyChainAccountToken__]?:@"";
+
+    return model;
+}
++ (instancetype)modelWithDictionary:(NSDictionary *)data page:(NSString *)page{
+    return [RequestModel modelWithDictionary:data page:page pageSize:nil];
+}
++ (instancetype)modelWithDictionary:(NSDictionary *)data{
+    return [RequestModel modelWithDictionary:data page:nil];
+}
++ (instancetype)standardModel{
+    return [RequestModel modelWithDictionary:nil];
+}
+@end

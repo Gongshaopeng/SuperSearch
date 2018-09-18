@@ -1,0 +1,92 @@
+//
+//  GSWebView.h
+//  GSwebView
+//
+//  Created by 巩小鹏 on 16/10/10.
+//  Copyright © 2016年 巩小鹏. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
+#import "NJKWebViewProgressView.h"
+#import "NJKWebViewProgress.h"
+#import "PanLoad.h"
+@class GSWebView;
+@protocol GSWebViewDelegate <NSObject>
+@optional
+- (void)gswebView:(GSWebView *)webview didFinishLoadingURL:(NSURL *)URL;
+- (void)gswebView:(GSWebView *)webview didFailToLoadURL:(NSURL *)URL error:(NSError *)error;
+- (void)gswebView:(GSWebView *)webview shouldStartLoadWithURL:(NSURL *)URL;
+- (void)gswebViewDidStartLoad:(GSWebView *)webview;
+@end
+
+
+@interface GSWebView : UIView<UIWebViewDelegate>
+
+
+
+#pragma mark - Public Properties
+
+//zlcdelegate
+@property (nonatomic, weak) id <GSWebViewDelegate> gsDelegate;
+
+// The main and only UIProgressView
+//@property (nonatomic, strong) UIProgressView *progressView;
+// The web views
+// Depending on the version of iOS, one of these will be set
+@property (nonatomic, strong) UIWebView *uiWebView;
+
+
+
+#pragma mark - Initializers view
+- (instancetype)initWithFrame:(CGRect)frame;
+
+
+#pragma mark - Static Initializers
+@property (nonatomic, strong) UIBarButtonItem *actionButton;
+@property (nonatomic, strong) UIColor *tintColor;
+@property (nonatomic, strong) UIColor *barTintColor;
+@property (nonatomic, assign) BOOL actionButtonHidden;
+@property (nonatomic, assign) BOOL showsURLInNavigationBar;
+@property (nonatomic, assign) BOOL showsPageTitleInNavigationBar;
+@property (nonatomic, assign) BOOL showsCanGoForward;
+@property (nonatomic, assign) BOOL showscanGoBack;
+
+//Allow for custom activities in the browser by populating this optional array
+@property (nonatomic, strong) NSArray *customActivityItems;
+@property (nonatomic,strong) NJKWebViewProgressView * progressView;//进度条
+@property (nonatomic,strong) PanLoad * pan;//!<滑动返回
+#pragma mark - Public Interface
+
+
+// Load a NSURLURLRequest to web view
+// Can be called any time after initialization
+- (void)loadRequest:(NSURLRequest *)request;
+
+// Load a NSURL to web view
+// Can be called any time after initialization
+- (void)loadURL:(NSURL *)URL;
+
+// Loads a URL as NSString to web view
+// Can be called any time after initialization
+- (void)loadURLString:(NSString *)URLString;
+
+
+// Loads an string containing HTML to web view
+// Can be called any time after initialization
+- (void)loadHTMLString:(NSString *)HTMLString;
+
+-(void)GSGoBack;
+-(void)GSGoForward;
+-(void)GSRelod;
+
+/**
+ *  加载网络主页
+ */
+-(void)newLoadRequest;
+/**
+ *  加载本地主页
+ */
+-(void)newLoadHTML;
+
+@end

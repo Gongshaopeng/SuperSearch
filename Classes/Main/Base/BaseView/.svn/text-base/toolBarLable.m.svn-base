@@ -1,0 +1,32 @@
+//
+//  toolBarLable.m
+//  Esou
+//
+//  Created by 巩小鹏 on 16/9/14.
+//  Copyright © 2016年 巩小鹏. All rights reserved.
+//
+
+#import "toolBarLable.h"
+
+@implementation toolBarLable
+
+-(instancetype)initWithFrame:(CGRect)frame{
+    if (self=[super initWithFrame:frame]) {
+        [self p_lable];
+    }
+    return self;
+}
+
+-(void)p_lable{
+
+//    self.text = @"12";
+    self.font = [UIFont systemFontOfSize:__KSize(21)];
+    self.textColor = [UIColor redColor];
+    self.adjustsFontSizeToFitWidth = YES;
+    self.textAlignment = NSTextAlignmentCenter;
+    self.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+    [self sizeToFit];
+
+}
+
+@end

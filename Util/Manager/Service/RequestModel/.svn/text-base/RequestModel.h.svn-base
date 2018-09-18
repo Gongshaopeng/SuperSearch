@@ -1,0 +1,29 @@
+//
+//  RequestModel.h
+//  如意夺宝
+//
+//  Created by allen on 16/4/9.
+//  Copyright © 2016年 com.juwang.rydb. All rights reserved.
+//
+
+#import "JSONModel.h"
+
+@interface RequestModel : JSONModel
+
++ (instancetype)modelWithDictionary:(NSDictionary *)data page:(NSString *)page pageSize:(NSString *)pageSize;
++ (instancetype)modelWithDictionary:(NSDictionary *)data page:(NSString *)page;
++ (instancetype)modelWithDictionary:(NSDictionary *)data;
++ (instancetype)standardModel;
+
+@property (nonatomic,strong) NSDictionary *data;
+//@property (nonatomic,strong) NSString *pageSize; //!< 一页的数据
+//@property (nonatomic,strong) NSString *page;     //!< 当前页数
+//@property (nonatomic,strong) NSString *api;
+//@property (nonatomic,strong) NSString *token;
+//
+//@property(nonatomic, strong) NSString *ver;
+//@property(nonatomic, strong) NSString *appkey;
+//@property(nonatomic, strong) NSString *from;
+//@property(nonatomic, strong) NSString *device_from;
+
+@end

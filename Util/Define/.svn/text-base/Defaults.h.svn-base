@@ -1,0 +1,21 @@
+//
+//  Config.h
+//  Product Temp
+//
+//  Created by jianjie on 15/11/2.
+//  Copyright © 2015年 jianjie. All rights reserved.
+//
+
+// DEFAULTS key －宏定义
+#ifndef Defaults_h
+#define Defaults_h
+
+#define __DEF_KEY_Search @"search"
+
+#define __DEF_KEY_RemoveView @"删除创建Web时贴的View"
+
+#define __DEF_KEY_SeamlessBrowsing @"SeamlessBrowsing_无痕浏览"
+
+#define __DEF_KEY_Night @"ISHight_是否夜间模式"
+
+#endif /* Night_h */

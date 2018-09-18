@@ -1,0 +1,59 @@
+//
+//  UrlKey.h
+//  Product Temp
+//
+//  Created by jianjie on 15/11/2.
+//  Copyright © 2015年 jianjie. All rights reserved.
+//
+
+#ifndef UrlKey_h
+#define UrlKey_h
+
+//以下为举例宏 
+//主要的url宏
+
+//基础网络
+#define URLDEBUG 1
+
+//测试内网
+#if URLDEBUG == 1
+#define __kBaseUrl__    @"http://14.152.76.131:8000/Service/search"
+#define __kBaseWebUrl__ @"http://rydb.youquha.com/"
+
+//测试外网
+#elif URLDEBUG == 2
+#define __kBaseUrl__    @"http://14.152.76.131:8000/Service/search"
+#define __kBaseWebUrl__ @"http://test.sjduobao.cn/"
+
+//线上地址
+#elif URLDEBUG == 3
+#define __kBaseUrl__    @"http://14.152.76.131:8000/Service/search"
+#define __kBaseWebUrl__ @"http://www.sjduobao.cn/"
+
+#endif
+
+
+#define __kURLAdvertisingVC__  @"https://m.baidu.com" //!<启动图广告
+#define __kURLWeb__  @"http://14.152.76.131:8000/News/Index" //!<web访问地址
+
+//http://14.152.76.131:8000/Service/search?keyword=国庆
+#define __kURLSearchPopularWords__  @"Service/search?" //!<热门词搜索
+
+//图片素材
+
+#define __Picture_Advertising_ @"qidong.png"//!<启动页广告图
+
+
+//基本配置
+#define __kAppKey__                      @""
+#define __kInterfaceVer__                @"1.0"
+#define __kAppSecret__                   @""
+
+//token
+#define __kKeyChainServer__              @"com.ds"
+#define __kKeyChainAccountToken__        @"com.ds.token"
+#define __kKeyChainAccountPassword__     @"com.ds.password"
+
+
+
+#endif /* UrlKey_h */

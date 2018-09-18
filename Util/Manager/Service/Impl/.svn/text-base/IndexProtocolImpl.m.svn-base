@@ -1,0 +1,92 @@
+//
+//  IndexProtocolImpl.m
+//  LaiZhuan
+//
+//  Created by allen on 16/1/12.
+//  Copyright © 2016年 jianjie. All rights reserved.
+//
+
+#import "IndexProtocolImpl.h"
+#import "CustomRequestManager.h"
+
+@implementation IndexProtocolImpl
+
+//- (void)fetchIndexData:(RequestModel *)paramDto complete:(void (^)(ResponseModel *))complete failed:(void (^)(NSString *))failed
+//{
+//    [self startRequestWithAPI:__kURLHome__ requestModel:paramDto completed:complete failed:failed method:RequestMethodPost];
+//}
+//- (void)fetchAddHomeName:(RequestModel *)paramDto complete:(void (^)(ResponseModel *))complete failed:(void (^)(NSString *))failed{
+//    [self startRequestWithAPI:__kURLHomeAddName__ requestModel:paramDto completed:complete failed:failed method:RequestMethodPost];
+//}
+//- (void)fetchIndexDetailedData:(RequestModel *)paramDto complete:(void (^)(ResponseModel *))complete failed:(void (^)(NSString *))failed{
+//    [self startRequestWithAPI:__kURLDetaild__ requestModel:paramDto completed:complete failed:failed method:RequestMethodPost];
+//}
+//- (void)fetchDetailedAddNewNumber:(RequestModel *)paramDto complete:(void (^)(ResponseModel *))complete failed:(void (^)(NSString *))failed{
+//    [self startRequestWithAPI:__kURLAddNumber__ requestModel:paramDto completed:complete failed:failed method:RequestMethodPost];
+//}
+//- (void)fetchDetailedModifyNumber:(RequestModel *)paramDto complete:(void (^)(ResponseModel *))complete failed:(void (^)(NSString *))failed{
+//    [self startRequestWithAPI:__kURLModify__ requestModel:paramDto completed:complete failed:failed method:RequestMethodPost];
+//}
+//- (void)fetchLogin:(RequestModel *)paramDto complete:(void (^)(ResponseModel *))complete failed:(void (^)(NSString *))failed{
+//    [self startRequestWithAPI:__kURLLogin__ requestModel:paramDto completed:complete failed:failed method:RequestMethodPost];
+//}
+
+-(void)fetchSearchPopularWords:(RequestModel *)paramDto complete:(void (^)(ResponseModel *))complete failed:(void (^)(NSString *error))failed{
+    [self startRequestWithAPI:__kURLSearchPopularWords__ requestModel:paramDto completed:complete failed:failed method:RequestMethodGet];
+}
+
+/**
+ *  @author Allen, 16-05-31 10:05:52
+ *
+ *  @brief 数据请求统一入口
+ *
+ *  @param api           api
+ *  @param requestModel  RequestModel, 可为nil
+ *  @param complete      成功回调
+ *  @param failed        失败回调
+ *  @param requestMethod RequestMethod:RequestMethodPost,RequestMethodGet
+ */
+- (void)startRequestWithAPI:(NSString *)api requestModel:(RequestModel *)requestModel completed:(void (^)(ResponseModel *))complete failed:(void (^)(NSString *))failed method:(RequestMethod)requestMethod{
+//    requestModel = requestModel?:[RequestModel standardModel];
+//    requestModel.api = api;
+    
+    [self startRequest:requestModel completed:complete failed:failed method:requestMethod];
+}
+
+/**
+ *  @author Allen, 16-05-31 10:05:00
+ *
+ *  @brief 热门词数据请求
+ *
+ */
+-(void)startRequest:(RequestModel *)requestModel completed:(void (^)(ResponseModel *))complete failed:(void (^)(NSString *))failed method:(RequestMethod)requestMethod
+{
+    NSMutableDictionary *mParamDic = [NSMutableDictionary dictionaryWithDictionary:@{
+//                                                                                     @"api":requestModel.api,
+//                                                                                     @"page":requestModel.page,
+//                                                                                     @"pageSize":requestModel.pageSize,
+//                                                                                     @"token":requestModel.token
+                                                                                     }];
+    if (requestModel.data != nil && requestModel.data.allKeys.count != 0) {
+        [mParamDic addEntriesFromDictionary:requestModel.data];
+    }
+    CustomRequestManager* manager = [CustomRequestManager sharedManager];
+    [manager startRequestWithUrl:__kBaseUrl__ parameters:mParamDic completed:^(NSDictionary *dic)
+     {
+//         ResponseModel *model = [ResponseModel instanceFromJSONDictionary:dic];
+         
+         ResponseModel *model = [[ResponseModel alloc]initWithDictionary:dic error:nil];
+
+         
+         if (complete) {
+             complete(model);
+         }
+         
+     } failed:^(NSString *errorStr) {
+         failed(errorStr);
+     } method:requestMethod];
+}
+
+
+
+@end

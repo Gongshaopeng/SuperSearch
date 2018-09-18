@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>iconImage</key>
+		<string>discount_icon_9</string>
+		<key>gridTitle</key>
+		<string>九块九</string>
+		<key>gridTag</key>
+		<string></string>
+		<key>gridColor</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>iconImage</key>
+		<string>discount_icon_women</string>
+		<key>gridTitle</key>
+		<string>女装尖货</string>
+		<key>gridTag</key>
+		<string></string>
+		<key>gridColor</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>iconImage</key>
+		<string>discount_icon_children</string>
+		<key>gridTitle</key>
+		<string>母婴推荐</string>
+		<key>gridTag</key>
+		<string></string>
+		<key>gridColor</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>iconImage</key>
+		<string>discount_icon_diy</string>
+		<key>gridTitle</key>
+		<string>淘宝DIY</string>
+		<key>gridTag</key>
+		<string></string>
+		<key>gridColor</key>
+		<string></string>
+	</dict>
+</array>
+</plist>

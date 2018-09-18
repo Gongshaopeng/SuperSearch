@@ -1,0 +1,182 @@
+//
+//  BaseTabBarController.m
+//  星火作文
+//
+//  Created by allen on 15/11/24.
+//  Copyright © 2015年 com.juwan.easyzw. All rights reserved.
+//
+
+#import "BaseTabBarController.h"
+#import "BaseViewController.h"
+
+//主VC
+//#import "MainPageVC.h"   //主页
+//#import "SignVC.h"       //领钱
+//#import "MakeMoneyVC.h"  //赚钱
+//#import "ApprenticeVC.h" //收徒
+//#import "ProfitVC.h"     //收益和排行
+//#import "IntegralViewController.h" //积分墙
+//
+#import "MyTabBarView.h"
+
+//控制器类型枚举
+typedef NS_ENUM(NSInteger, VCType)
+{
+    MainPageVCType = 0,
+    SignVCType,
+    MakeMoneyVCType,
+    ApprenticeVCType,
+    RankingVCType
+};
+
+#define VCNameArray @[@"TrendVC",@"NotesVC",@"AnalysisVC"]
+
+@interface BaseTabBarController ()<MyTabBarViewBtnClickedDelegate>
+@property (nonatomic,strong) NSArray * titleArr;
+@property (nonatomic,strong) NSArray * itmeImageArr;
+@property (nonatomic,strong) NSArray * itmeSeleImageArr;
+
+@property (nonatomic,strong) NSString * strNaviTitle;
+@end
+
+@implementation BaseTabBarController
+
+#pragma mark - Life circle
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+    
+    }
+    return self;
+}
+-(void)viewWillAppear:(BOOL)animated{
+//    self.strNaviTitle = [NSString stringWithFormat:@"%@ 记录",self.naviTitleStr];
+    ;
+}
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+//    self.navigationController.navigationBarHidden = YES;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self initData];
+    [self lazyCreateUI];
+    [self layoutSubviews];
+    [self creatViewControllers];
+}
+
+#pragma mark - initData
+
+- (void)initData
+{
+    self.titleArr = @[@"红包记录",@"数字分析",@"趋势分析"];
+    self.itmeImageArr =@[@"hongbaojilu",@"shuzifenxi",@"zoushifenxi"];
+    self.itmeSeleImageArr =@[@"hongbaojilu1",@"shuzifenxi1",@"zoushifenxi-1"];
+
+    //隐藏系统的tabBar
+    self.tabBar.hidden=YES;
+}
+#pragma mark - LazyCreateUI
+
+- (void)lazyCreateUI
+{
+    [self.view addSubview:self.myTabBarView];
+}
+
+#pragma mark - LayoutSubviews
+
+-(void)layoutSubviews
+{
+    
+}
+
+#pragma mark - Config Data
+
+
+
+#pragma mark - System Delegate
+
+#pragma mark - Event Response
+
+#pragma mark - NSNotificationCenter Method
+
+#pragma mark - other Match
+
+-(void)creatViewControllers
+{
+    
+//    NSArray *classNames = @[@"JokesViewController",@"PicsViewController",@"VideosViewController",@"GirlsViewController"];
+    
+    NSMutableArray *vcArr = [NSMutableArray array];
+    for (NSInteger i = 0; i < VCNameArray.count; i++) {
+        //转化为Class
+        Class vcClass = NSClassFromString(VCNameArray[i]);
+        BaseViewController *vc = [[vcClass alloc] init];
+        vc.title = self.titleArr[i];
+        //传值 把具体分类传入
+        
+        //加入到导航
+//        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+//
+        [vcArr addObject:vc];
+        
+    }
+    self.viewControllers = vcArr;
+    
+}
+
+- (void)myTabBarViewBtnClicked:(NSInteger)index
+{
+    for (int i=0; i<_myTabBarView.itemTitleNameArray.count; i++)
+    {
+        UIControl *control = (UIControl *)[_myTabBarView.bgView viewWithTag:i+100];
+        UIImageView *imageView = (UIImageView *)[control viewWithTag:11111+i];
+        UILabel*label = (UILabel *)[control viewWithTag:22222+i];
+        if (i==index)
+        {
+            imageView.image = [UIImage imageNamed:_myTabBarView.itemSeleImageNameArray[i]];
+            label.textColor = [UIColor colorWithHexString:@"#dc3b40"];
+        }else
+        {
+            imageView.image = [UIImage imageNamed:_myTabBarView.itemImageNameArray[i]];
+            label.textColor = [UIColor grayColor];
+        }
+    }
+   
+    self.selectedIndex = index;
+}
+
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
+
+#pragma mark - Getters & Setters
+
+- (MyTabBarView *)myTabBarView
+{
+    if (_myTabBarView == nil)
+    {
+        _myTabBarView =
+        [[MyTabBarView alloc]initWithFrame:
+         CGRectMake(0,__kScreenHeight__- __KSize(98), __kScreenWidth__, __KSize(98))itemImageNameArray:self.itmeImageArr itemSeleImageNameArray:self.itmeSeleImageArr
+                        itemTitleNameArray:self.titleArr];
+        _myTabBarView.userInteractionEnabled = YES;
+        _myTabBarView.delegate = self;
+        //        _myTabBarView.backgroundColor = [UIColor orangeColor];
+    }
+    return _myTabBarView;
+}
+
+#pragma mark - MemoryWarning
+
+
+
+
+@end

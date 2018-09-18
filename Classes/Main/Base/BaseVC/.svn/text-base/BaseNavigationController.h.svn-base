@@ -1,0 +1,13 @@
+//
+//  BaseNavigationController.h
+//  Product Temp( 工程模版)
+//
+//  Created by jianjie on 15/11/2.
+//  Copyright © 2015年 jianjie. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface BaseNavigationController : UINavigationController
+
+@end

@@ -1,0 +1,27 @@
+//
+//  STCModel.m
+//  TESTDome
+//
+//  Created by 巩继鹏 on 16/6/13.
+//  Copyright © 2016年 Roger. All rights reserved.
+//
+
+#import "STCModel.h"
+
+@implementation STCModel
+
+static id _STC;
++ (instancetype)stcModel{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _STC = [[[self class] alloc] init];
+        [_STC p_InitNew];
+    });
+    return _STC;
+}
+-(void)p_InitNew{
+    self.netWorkNEW = 0;
+    self.seamlessBrowsing = [DEFAULTS integerForKey:__DEF_KEY_SeamlessBrowsing]?:0;
+}
+
+@end

@@ -1,0 +1,16 @@
+//
+//  Config.h
+//  Product Temp
+//
+//  Created by jianjie on 15/11/2.
+//  Copyright © 2015年 jianjie. All rights reserved.
+//
+
+// 主题背景色彩－宏定义
+#ifndef Night_h
+#define Night_h
+
+#define __BLACK @"black"
+#define __WHITE @"white"
+
+#endif /* Night_h */
